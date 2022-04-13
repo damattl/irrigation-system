@@ -1,3 +1,4 @@
 ﻿bin/
 obj/
 app.db
+Data/Migrations/
