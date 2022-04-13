@@ -9,10 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Protobuf Include="Protos\base.proto">
             <GrpcServices>Both</GrpcServices>
             <Access>Public</Access>

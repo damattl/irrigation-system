@@ -29,8 +29,8 @@ void subscribe_to_topics() {
 void reconnect() {
     while (!client.connected()) {
         Serial.print("Attempting MQTT connection...");
-        String clientId = "ESP8266Client-";
-        clientId += String(random(0xffff), HEX);
+        String clientId = "ESP8266Client-testing";
+        // clientId += String(random(0xffff), HEX);
         // if (client.connect(clientId.c_str(), MQTT_USER, MQTT_PASS)) {
         if (client.connect(clientId.c_str())) {
             Serial.println("connected");

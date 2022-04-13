@@ -5,8 +5,8 @@ namespace MQTTBroker;
 
 public class BrokerGrpcService : BrokerGrpc.BrokerGrpcBase
 {
-    private readonly MqttBroker _broker;
-    public BrokerGrpcService(MqttBroker mqttBroker)
+    private readonly IMqttBroker _broker;
+    public BrokerGrpcService(IMqttBroker mqttBroker)
     {
         _broker = mqttBroker;
     }

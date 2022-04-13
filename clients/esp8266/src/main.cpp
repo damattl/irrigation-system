@@ -14,10 +14,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
     // Serial.println(msg);
 
 
-    if (is_topic("/home/irrigation-system/valves/#", topic_str)) {
+    if (is_topic("/home/irrigation-system/ESP8266Client-testing/valves/#", topic_str)) {
         Serial.println(msg);
     }
-    if (is_topic("/home/irrigation-system/moisture-sensors/#", topic_str)) {
+    if (is_topic("/home/irrigation-system/ESP8266Client-testing/moisture-sensors/#", topic_str)) {
         handle_moisture_sensor(topic_str, msg);
     }
 

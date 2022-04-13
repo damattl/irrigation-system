@@ -18,6 +18,7 @@ public class MqttRouter
     {
         if (eventArgs.Packet is MqttPublishPacket packet)
         {
+            Console.WriteLine(packet.Topic);
             var methods = typeof(MqttRouter)
                 .GetMethods()
                 .Where(x => x.GetCustomAttributes(typeof(MqttRouteAttribute), false).FirstOrDefault() != null);
@@ -43,17 +44,19 @@ public class MqttRouter
     }
     
     
-    [MqttRoute(@"\/home\/irrigation-system\/moisture-sensors\/([0-9]+)")]
+    [MqttRoute(@"\/home\/irrigation-system\/([a-zA-z0-9-]+)\/moisture-sensors\/([0-9]+)")] // TODO: There should be a better way
     public async void HandleMoistureSensorMessage(Regex regex, string clientId, MqttPublishPacket packet)
     {
         var matches = regex.Matches(packet.Topic);
         var groups = matches[0].Groups;
-        if (groups.Count < 2)
+        if (groups.Count < 3)
         {
             return;
         }
 
-        var sensorId = groups[1].Value;
+        var clientIdId = groups[3].Value;
+        Console.WriteLine("ClientId: {0}", clientId);
+        var sensorId = groups[2].Value;
         Console.WriteLine("SensorId: {0}", sensorId);
         var payload = System.Text.Encoding.Default.GetString(packet.Payload);
         var sensorReading = float.Parse(payload);
