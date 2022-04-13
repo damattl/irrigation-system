@@ -3,7 +3,7 @@
 // TODO: Check if these functions are still needed
 
 struct PinInfo {
-    int pin;
+    int pin = -1;
     bool pwm;
 };
 
@@ -25,7 +25,26 @@ std::map<String, PinInfo> pin_map = {
 
 
 
+void handle_moisture_sensor(String& topic, String& msg) {
+    std::vector<String> topic_vector = split_str(topic, '/');
 
+    String sensor_id = topic_vector[topic_vector.size()]; // TODO: Error handling?
+    PinInfo info = pin_map[sensor_id];
+    if (info.pin == -1) {
+        return;
+    }
+
+    std::vector<String> msg_vector = split_str(msg, ':'); // 1:0 // TODO: Implement without Strings, but Ints?
+
+    if (msg_vector[0] == "1") {
+        float sensor_data = read_sensor(info.pin);
+        publish_sensor_data(sensor_data, client);
+    }
+}
+
+
+
+/*
 void handle_write_pin(PinInfo& pin_info, int use_pwm, int pin_state, int duration) {
     if (use_pwm) {
         if (!pin_info.pwm) {
@@ -44,6 +63,7 @@ void handle_write_pin(PinInfo& pin_info, int use_pwm, int pin_state, int duratio
 void handle_read_pin() {
 
 }
+
 
 void handle_pin(std::vector<String>& msgVector) {
     if (!pin_map.count(msgVector[0])) {
@@ -77,21 +97,10 @@ void handle_message(String& msg) {
     std::vector<String> msgVector = split_str(msg, ':');
     Serial.println(msgVector.size());
 
-    /* if ( && msgVector[0] == "0") {
+    if ( && msgVector[0] == "0") {
         handle_pin(msgVector); //TODO: Might produce undefined behavior
     }  else {
         Serial.println(msg);
-    } */
-
-}
-
-void handle_moisture_sensor(String& topic, String& msg) {
-    std::vector<String> topic_vector = split_str(topic, '/');
-    unsigned int sensor_id = topic_vector[topic_vector.size()].toInt(); // TODO: Error handling?
-    std::vector<String> msg_vector = split_str(msg, ':'); // 1:0 // TODO: Implement without Strings, but Ints?
-
-    if (msg_vector[0] == "1") {
-        float sensor_data = read_sensor(sensor_id);
-        publish_sensor_data(sensor_data, client);
     }
-}
+
+} */

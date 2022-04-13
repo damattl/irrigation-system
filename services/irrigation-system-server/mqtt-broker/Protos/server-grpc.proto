@@ -1,0 +1,12 @@
+﻿syntax="proto3";
+import "base.proto";
+
+service ServerGrpc {
+  rpc SendSensorData(SensorData) returns (Empty);
+}
+
+message SensorData {
+  string client_id = 1;
+  string sensor_id = 2;
+  float sensor_reading = 3;
+}

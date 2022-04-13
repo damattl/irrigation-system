@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "irrigation-system-server", "irrigation-system-server\irrigation-system-server.csproj", "{1E73EA54-AA54-4A9A-8819-A7EF253C1191}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mqtt-broker", "mqtt-broker\mqtt-broker.csproj", "{6C6AC459-8768-48E3-9C2F-EEBE8F86BF77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E73EA54-AA54-4A9A-8819-A7EF253C1191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E73EA54-AA54-4A9A-8819-A7EF253C1191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E73EA54-AA54-4A9A-8819-A7EF253C1191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E73EA54-AA54-4A9A-8819-A7EF253C1191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C6AC459-8768-48E3-9C2F-EEBE8F86BF77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C6AC459-8768-48E3-9C2F-EEBE8F86BF77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C6AC459-8768-48E3-9C2F-EEBE8F86BF77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C6AC459-8768-48E3-9C2F-EEBE8F86BF77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
