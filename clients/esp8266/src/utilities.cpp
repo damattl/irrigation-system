@@ -39,7 +39,7 @@ bool is_topic(String topic_template, String topic) {
             continue;
         } else if(topicTemplateVector[i] == "+") {
             continue;
-        } else if(topicTemplateVector[ttv_size - 1] == "#") {
+        } else if(topicTemplateVector[i] == "#") {
             return true;
         } else {
             return false;

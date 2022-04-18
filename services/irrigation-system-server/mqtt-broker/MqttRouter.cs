@@ -33,6 +33,7 @@ public class MqttRouter
                 {
                     continue;
                 }
+                Console.WriteLine(routeAttribute.Regex);
                 if (routeAttribute.Regex.IsMatch(packet.Topic))
                 {
                     method.Invoke(this, new object[]{routeAttribute.Regex, eventArgs.ClientId, packet});

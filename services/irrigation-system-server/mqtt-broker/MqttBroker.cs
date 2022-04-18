@@ -37,7 +37,7 @@ public class MqttBroker : IMqttBroker
             .WithPayload(payload)
             .Build();
         var injectedApplicationMessage = new MqttInjectedApplicationMessage(message);
-        Console.WriteLine("Sending Message");
+        Console.WriteLine($"Sending Message '{payload}' to topic '{topic}'");
         await _mqttServer.InjectApplicationMessage(injectedApplicationMessage);
     }
 }

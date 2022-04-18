@@ -2,43 +2,80 @@
 
 // TODO: Check if these functions are still needed
 
-struct PinInfo {
-    int pin = -1;
-    bool pwm;
+struct Pin {
+    int value = -1;
 };
 
-std::map<String, PinInfo> pin_map = {
-        {"TX", {TX, true}},
-        {"RX", {RX, true}},
-        // {"A0", {A0, false}},
-        {"D0", {16, false}},
-        {"D1", {5, true}},
-        {"D2", {4, true}},
-        {"D3", {0, true}},
-        {"D4", {2, true}},
-        {"D5", {14, true}},
-        {"D6", {12, true}},
-        {"D7", {13, true}},
-        {"D8", {15, true}}
+std::map<String, Pin> pin_map = {
+        {"TX", {TX}},
+        {"RX", {RX}},
+        {"A0", {A0}},
+        {"D0", {D0}},
+        {"D1", {D1}},
+        {"D2", {D2}},
+        {"D3", {D3}},
+        {"D4", {D4}},
+        {"D5", {D5}},
+        {"D6", {D6}},
+        {"D7", {D7}},
+        {"D8", {D8}}
 };
 
+std::map<String, u_int8_t> sensor_pins = {
+        {"1", D1},
+        {"2", D2},
+        {"3", D4},
+};
+
+std::map<String, u_int8_t> valve_pins = {
+        {"1", D5},
+        {"2", D6},
+        {"3", D7},
+};
 
 
 
 void handle_moisture_sensor(String& topic, String& msg) {
     std::vector<String> topic_vector = split_str(topic, '/');
 
-    String sensor_id = topic_vector[topic_vector.size()]; // TODO: Error handling?
-    PinInfo info = pin_map[sensor_id];
-    if (info.pin == -1) {
+    String sensor_id = topic_vector[topic_vector.size() - 1]; // TODO: Error handling?
+    u_int8_t pin = sensor_pins[sensor_id];
+    if (pin == 0) {
         return;
     }
 
     std::vector<String> msg_vector = split_str(msg, ':'); // 1:0 // TODO: Implement without Strings, but Ints?
 
     if (msg_vector[0] == "1") {
-        float sensor_data = read_sensor(info.pin);
-        publish_sensor_data(sensor_data, client);
+        float sensor_data = read_sensor(pin);
+        publish_sensor_data(sensor_data, client, sensor_id);
+    }
+}
+
+void handle_valve(String& topic, String& msg) {
+    std::vector<String> topic_vector = split_str(topic, '/');
+
+    String valve_id = topic_vector[topic_vector.size() - 1];
+    u_int8_t pin = valve_pins[valve_id];
+    if (pin == 0) {
+        return;
+    }
+
+    std::vector<String> msg_vector = split_str(msg, ':');
+
+
+    if (msg_vector[0] == "1") {
+        digitalWrite(pin, HIGH);
+        if (msg_vector.size() > 1) {
+            int time_opened = msg_vector[1].toInt() * 1000;
+            delay(time_opened);
+        } else {
+            delay(1000);
+        }
+        digitalWrite(pin, LOW);
+    }
+    if (msg_vector[0] == "0") {
+        digitalWrite(pin, LOW);
     }
 }
 

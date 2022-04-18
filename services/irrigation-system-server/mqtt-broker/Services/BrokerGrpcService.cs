@@ -18,10 +18,18 @@ public class BrokerGrpcService : BrokerGrpc.BrokerGrpcBase
         _broker.SendMessage(topic, payload);
         return Task.FromResult(new Empty());
     }
-
-    public override Task<Empty> ReadSensor(SensorInfo request, ServerCallContext context)
+    
+    public override Task<Empty> CloseValve(CloseValveRequest request, ServerCallContext context)
     {
-        var topic = $"/home/irrigation-system/{request.ClientId}/valves/{request.SensorId}";
+        var topic = $"/home/irrigation-system/{request.Info.ClientId}/valves/{request.Info.ValveId}";
+        var payload = $"0";
+        _broker.SendMessage(topic, payload);
+        return Task.FromResult(new Empty());
+    }
+
+    public override Task<Empty> ReadSensor(ReadSensorRequest request, ServerCallContext context)
+    {
+        var topic = $"/home/irrigation-system/{request.Info.ClientId}/moisture-sensors/{request.Info.SensorId}";
         var payload = "1"; // TODO: Right Payload for command?
         _broker.SendMessage(topic, payload);
         return Task.FromResult(new Empty());

@@ -25,6 +25,10 @@ function sendData() {
     post({message: "Test"}, "/home/sendData")
 }
 
-function callValve() {
-    post({duration: 10, valveId: "123123", clientId: "ESP8266Client-testing"}, "/home/callValve")
+function openValve() {
+    post({duration: 1, valveId: "1", clientId: "ESP8266Client-testing"}, "/home/openValve")
+}
+
+function readSensor() {
+    post({sensorId: "1", clientId: "ESP8266Client-testing"}, "/home/readSensor")
 }

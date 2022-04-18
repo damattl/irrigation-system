@@ -15,7 +15,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 
     if (is_topic("/home/irrigation-system/ESP8266Client-testing/valves/#", topic_str)) {
-        Serial.println(msg);
+        handle_valve(topic_str, msg);
     }
     if (is_topic("/home/irrigation-system/ESP8266Client-testing/moisture-sensors/#", topic_str)) {
         handle_moisture_sensor(topic_str, msg);
@@ -34,7 +34,15 @@ void setup() {
     setup_wifi();
     client.setServer(MQTT_BROKER, MQTT_PORT);
     client.setCallback(callback);
-    pinMode(MAGNET_PIN, OUTPUT);
+    // Configuring Valve-Pins
+    pinMode(D5, OUTPUT);
+    pinMode(D6, OUTPUT);
+    pinMode(D7, OUTPUT);
+
+    // Configuring Sensor-Pins
+    pinMode(D1, OUTPUT);
+    pinMode(D2, OUTPUT);
+    pinMode(D4, OUTPUT);
     // digitalWrite(MAGNET_PIN, HIGH);
 }
 
@@ -44,7 +52,6 @@ void loop() {
     if (!client.connected()) {
         reconnect();
     }
-
     // float sensor_read = read_sensor();
 
     // delay(5000);
