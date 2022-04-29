@@ -1,0 +1,51 @@
+﻿@page "/add-device-type"
+@using IrrigationSystemServer.Models
+@using IrrigationSystemServer.Services
+@inject NavigationManager _navigationManager
+@inject DeviceTypeService _deviceTypeService
+
+<h2>Add DeviceType</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="name" class="control-label">Name</label>
+                <input id="name"  class="form-control" @bind="@deviceType.Name" />
+            </div>
+            <div class="form-group">
+                <label for="sensors" class="control-label">Sensors</label>
+                <input id="sensors" type="number" class="form-control" @bind="@deviceType.SensorCount" />
+            </div>
+            <div class="form-group">
+                <label for="valves" class="control-label">Valves</label>
+                <input id="valves" type="number" class="form-control" @bind="@deviceType.ValveCount" />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateDeviceType" value="Save"/>
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    readonly DeviceType deviceType = new DeviceType();
+
+    private async void CreateDeviceType()
+    {
+        await _deviceTypeService.InsertDeviceTypeAsync(deviceType);
+        _navigationManager.NavigateTo("device-types");
+    }
+    void Cancel()
+    {
+        _navigationManager.NavigateTo("device-types");
+    }
+}

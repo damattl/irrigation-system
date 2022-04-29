@@ -1,18 +1,18 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:5181",
-      "sslPort": 44306
+      "applicationUrl": "http://localhost:2992",
+      "sslPort": 44303
     }
   },
   "profiles": {
-    "irrigation_system_server": {
+    "IrrigationSystemServer": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7019;http://localhost:5019",
+      "applicationUrl": "https://localhost:7009;http://localhost:5009",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

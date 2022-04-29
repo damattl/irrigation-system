@@ -1,7 +1,13 @@
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
-using irrigation_system_server.Data;
-using irrigation_system_server.Services;
+using IrrigationSystemServer.Areas.Identity;
+using IrrigationSystemServer.Data;
+using IrrigationSystemServer.Models;
+using IrrigationSystemServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,15 +16,17 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
-builder.Services.AddGrpc();
-builder.Services.AddGrpcClient<BrokerGrpc.BrokerGrpcClient>(opt =>
-{
-    opt.Address = new Uri("https://localhost:7220");
-});
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+builder.Services
+    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+builder.Services.AddScoped<DeviceTypeService>();
+builder.Services.AddScoped<DeviceService>();
+builder.Services.AddScoped<MoistureSensorService>();
+builder.Services.AddScoped<PlantProfileService>();
+builder.Services.AddScoped<IrrigationProfileService>();
 
 var app = builder.Build();
 
@@ -29,12 +37,13 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -42,13 +51,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGrpcService<ServerGrpcService>();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllers();
-app.MapRazorPages();
-
-
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
 
 app.Run();

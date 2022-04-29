@@ -1,0 +1,47 @@
+﻿@page "/add-plant-profile"
+@using IrrigationSystemServer.Models
+@using IrrigationSystemServer.Services
+@inject NavigationManager _navigationManager
+@inject PlantProfileService _plantProfileService
+
+
+<h2>Add PlantProfile</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="name" class="control-label">Name</label>
+                <input id="name"  class="form-control" @bind="@plantProfile.Name" />
+            </div>
+            <div class="form-group">
+                <label for="water-consumption" class="control-label">Water-Consumption</label>
+                <input id="water-consumption" type="number" class="form-control" @bind="@plantProfile.WaterConsumption" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreatePlantProfile" value="Save"/>
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    readonly PlantProfile plantProfile = new PlantProfile();
+
+    private async void CreatePlantProfile()
+    {
+        await _plantProfileService.InsertPlantProfileAsync(plantProfile);
+        _navigationManager.NavigateTo("plant-profiles");
+    }
+    void Cancel()
+    {
+        _navigationManager.NavigateTo("plant-profiles");
+    }
+}

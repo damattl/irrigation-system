@@ -1,0 +1,57 @@
+﻿@page "/add-device"
+@using IrrigationSystemServer.Models
+@using IrrigationSystemServer.Services
+@inject NavigationManager _navigationManager
+@inject DeviceService _deviceService
+@inject DeviceTypeService _deviceTypeService
+
+<h2>Add Device</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="device-type" class="control-label">Device Type</label>
+                <select @bind="device.TypeId" class="form-control" id="device-type">
+                    @if (_deviceTypes != null)
+                    {
+                        @foreach(var deviceType in _deviceTypes)
+                        {
+                            <option value="@deviceType.DeviceTypeId">@deviceType.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateDeviceType" value="Save"/>
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    readonly Device device = new Device();
+    private List<DeviceType>? _deviceTypes;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _deviceTypes = await _deviceTypeService.GetAllDeviceTypesAsync();
+    }
+
+    private async void CreateDeviceType()
+    {
+        await _deviceService.InsertDeviceAsync(device);
+        _navigationManager.NavigateTo("devices");
+    }
+    void Cancel()
+    {
+        _navigationManager.NavigateTo("devices");
+    }
+}
