@@ -1,0 +1,74 @@
+﻿@page "/irrigation-profile/{Id:guid}"
+
+<PageTitle>Irrigation Profile</PageTitle>
+
+@using IrrigationSystemServer.Models
+@using IrrigationSystemServer.Services
+@inject IrrigationProfileService _irrigationProfileService
+@inject IJSRuntime JSRuntime
+
+
+@if (_irrigationProfile == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <h1>Irrigation-Profile für @_irrigationProfile.PlantProfile.Name</h1>
+    <div class="irrigation-chart-container">
+        <canvas id="irrigation-chart"></canvas>  
+    </div>                                                                
+}
+
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private IrrigationProfile? _irrigationProfile;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _irrigationProfile = await _irrigationProfileService.GetIrrigationProfileAsync(Id);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var config = new
+        {
+            Options = new {
+                MaintainAspectRatio= false,
+            },
+            Type = "line",
+            Data = new
+            {
+                Labels = new[] {
+                    "29.04. Morgends", 
+                    "29.04. Mittags", 
+                    "29.04. Abends",
+                    "30.04. Morgends", 
+                    "30.04. Mittags", 
+                    "30.04. Abends",
+                },
+                Datasets = new[]
+                {
+                    new
+                    {
+                        Label = "Sensor readings",
+                        Data = new[]
+                        {
+                            300, 400, 250, 10, 300, 320
+                        },
+                        Fill = false,
+                        BorderColor = "rgb(75, 192, 192)",
+                        Tension = 0.1,
+                    }
+                }
+            }
+        };
+        await JSRuntime.InvokeVoidAsync("buildChart", "irrigation-chart", config);
+    }
+
+}

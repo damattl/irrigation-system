@@ -11,7 +11,7 @@
 #include <config.h>
 
 void reconnect();
-void setup_wifi();
+void setupWifi();
 extern WiFiClient espClient;
 extern PubSubClient client;
 #endif //IRRIGATION_SYSTEM_CONNECTION_HANDLERS_H

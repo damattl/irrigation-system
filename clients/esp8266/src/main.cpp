@@ -14,11 +14,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
     // Serial.println(msg);
 
 
-    if (is_topic("/home/irrigation-system/ESP8266Client-testing/valves/#", topic_str)) {
-        handle_valve(topic_str, msg);
+    if (isTopic("/home/irrigation-system/ESP8266Client-testing/valves/#", topic_str)) {
+        handleValve(topic_str, msg);
     }
-    if (is_topic("/home/irrigation-system/ESP8266Client-testing/moisture-sensors/#", topic_str)) {
-        handle_moisture_sensor(topic_str, msg);
+    if (isTopic("/home/irrigation-system/ESP8266Client-testing/moisture-sensors/#", topic_str)) {
+        handleMoistureSensor(topic_str, msg);
     }
 
     /* if (String(topic) == "/home/irrigation-system/magnet-pin") {
@@ -31,7 +31,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void setup() {
     Serial.begin(115200);
-    setup_wifi();
+    setupWifi();
     client.setServer(MQTT_BROKER, MQTT_PORT);
     client.setCallback(callback);
     // Configuring Valve-Pins
@@ -52,7 +52,7 @@ void loop() {
     if (!client.connected()) {
         reconnect();
     }
-    // float sensor_read = read_sensor();
+    // float sensor_read = readSensor();
 
     // delay(5000);
 

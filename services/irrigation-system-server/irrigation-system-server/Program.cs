@@ -1,3 +1,4 @@
+using IrrigationSystemServer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -28,6 +29,12 @@ builder.Services.AddScoped<MoistureSensorService>();
 builder.Services.AddScoped<PlantProfileService>();
 builder.Services.AddScoped<IrrigationProfileService>();
 
+builder.Services.AddGrpc();
+builder.Services.AddGrpcClient<BrokerGrpc.BrokerGrpcClient>(opt =>
+{
+    opt.Address = new Uri("https://localhost:7220");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -51,6 +58,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapGrpcService<ServerGrpcService>();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

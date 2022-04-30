@@ -19,6 +19,13 @@ public class IrrigationProfileService
             .Include(p => p.PlantProfile)
             .ToListAsync();
     }
+    
+    public async Task<IrrigationProfile?> GetIrrigationProfileAsync(Guid id)
+    {
+        return await _context.IrrigationProfiles
+            .Include(p => p.PlantProfile)
+            .FirstAsync(p => p.IrrigationProfileId == id);
+    }
 
     public async Task<bool> InsertIrrigationProfileAsync(IrrigationProfile irrigationProfile)
     {

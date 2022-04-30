@@ -1,6 +1,6 @@
 #include <utilities.h>
 
-std::vector<String> split_str(String& str, char delimiter) {
+std::vector<String> splitStr(String& str, char delimiter) {
     std::vector<String> str_vector{};
     String sub_str;
 
@@ -19,10 +19,10 @@ std::vector<String> split_str(String& str, char delimiter) {
 }
 
 // TODO: Do all this with C Strings
-bool is_topic(String topic_template, String topic) {
+bool isTopic(String topic_template, String topic) {
 
-    auto topicVector = split_str(topic, '/');
-    auto topicTemplateVector = split_str(topic_template, '/');
+    auto topicVector = splitStr(topic, '/');
+    auto topicTemplateVector = splitStr(topic_template, '/');
 
     unsigned int tv_size = topicVector.size();
     unsigned int ttv_size = topicTemplateVector.size();

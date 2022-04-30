@@ -9,6 +9,6 @@ public class MoistureSensorData
     public Guid MoistureSensorDataId { get; set; }
     public Guid MoistureSensorId { get; set; }
     public MoistureSensor? MoistureSensor { get; set; }
-    public long SensorReading { get; set; }
+    public float SensorReading { get; set; }
     public long TimeStamp { get; set; } = DateTime.Now.ToBinary();
 }

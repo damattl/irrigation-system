@@ -1,3 +1,4 @@
+using System.Net;
 using Grpc.Net.Client;
 using MQTTBroker;
 using MQTTnet.Server;
@@ -33,6 +34,15 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.MapGrpcService<BrokerGrpcService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+
+// TEST //
+
+string hostName = Dns.GetHostName();
+Console.WriteLine(hostName);
+string myIP = Dns.GetHostEntry(hostName).AddressList[1].ToString();
+Console.WriteLine(myIP);
+
+
 
 var broker = app.Services.GetRequiredService<IMqttBroker>();
 var brokerThread = new Thread(broker.StartAsync)

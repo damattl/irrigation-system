@@ -1,0 +1,33 @@
+﻿syntax="proto3";
+option csharp_namespace = "IrrigationSystemServer";
+import "base.proto";
+
+service BrokerGrpc {
+  rpc OpenValve(OpenValveRequest) returns (Empty);
+  rpc CloseValve(CloseValveRequest) returns (Empty);
+  rpc ReadSensor(ReadSensorRequest) returns (Empty);
+}
+
+
+message SensorInfo {
+  string client_id = 1;
+  string sensor_id = 2;
+}
+
+message ValveInfo {
+  string client_id = 1;
+  string valve_id = 2;
+}
+
+message ReadSensorRequest {
+  SensorInfo info = 1;
+}
+
+message OpenValveRequest {
+  ValveInfo info = 1;
+  int32 duration = 2;
+}
+
+message CloseValveRequest {
+  ValveInfo info = 1;
+}

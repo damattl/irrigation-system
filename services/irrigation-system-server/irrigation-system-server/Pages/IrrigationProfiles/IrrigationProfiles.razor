@@ -35,7 +35,7 @@ else
         @foreach (var irrigationProfile in _irrigationProfiles)
         {
             <tr>
-                <td>@irrigationProfile.IrrigationProfileId</td>
+                <td><a href="irrigation-profile/@irrigationProfile.IrrigationProfileId">@irrigationProfile.IrrigationProfileId</a></td>
                 <td>@irrigationProfile.PlantProfile!.Name</td>
                 <td>@irrigationProfile.DeviceId</td>
                 <td>

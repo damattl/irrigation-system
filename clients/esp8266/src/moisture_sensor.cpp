@@ -5,7 +5,7 @@
 #include "moisture_sensor.h"
 
 
-float read_sensor(unsigned int sensor_pin) {
+float readSensor(unsigned int sensor_pin) {
     Serial.println("Reading sensor");
     digitalWrite(sensor_pin, HIGH);
 
@@ -21,7 +21,7 @@ float read_sensor(unsigned int sensor_pin) {
     return sensor_value;
 }
 
-void publish_sensor_data(float sensor_data, PubSubClient& client, String& sensor_id) {
+void publishSensorData(float sensor_data, PubSubClient& client, String& sensor_id) {
     char payload[8];
     dtostrf(sensor_data, 6, 2, payload);
     String topic = "/home/irrigation-system/ESP8266Client-testing/moisture-sensors/" + sensor_id;

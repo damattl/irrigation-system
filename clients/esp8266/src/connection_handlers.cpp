@@ -8,7 +8,7 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-void setup_wifi() {
+void setupWifi() {
     WiFi.begin(WIFI_SSID, WIFI_PASS);
     while (WiFi.status() != WL_CONNECTED) {
         delay(100);
@@ -17,7 +17,7 @@ void setup_wifi() {
     Serial.println(WiFi.localIP());
 }
 
-void subscribe_to_topics() {
+void subscribeToTopics() {
     if (!client.connected()) {
         return;
     }
@@ -34,7 +34,7 @@ void reconnect() {
         // if (client.connect(clientId.c_str(), MQTT_USER, MQTT_PASS)) {
         if (client.connect(clientId.c_str())) {
             Serial.println("connected");
-            subscribe_to_topics();
+            subscribeToTopics();
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
