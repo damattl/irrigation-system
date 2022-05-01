@@ -4,6 +4,8 @@
 
 @using IrrigationSystemServer.Models
 @using IrrigationSystemServer.Services
+@using IrrigationSystemServer.Charts
+@using System.Globalization
 @inject IrrigationProfileService _irrigationProfileService
 @inject IJSRuntime JSRuntime
 
@@ -36,39 +38,104 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var config = new
+        if (_irrigationProfile == null)
         {
-            Options = new {
-                MaintainAspectRatio= false,
-            },
-            Type = "line",
-            Data = new
+            return;
+        }
+        var rawData = SensorTestDataBuilder.Build(_irrigationProfile.MoistureSensorId, 10);
+
+        await CreateChart(rawData);
+    }
+
+    private async Task CreateChart(List<MoistureSensorData> sensorData)
+    {
+        var chartData = new ChartData<float>
+        {
+            Labels = sensorData.Select(d => DateTime.FromBinary(d.TimeStamp).ToString("ddd HH:mm")),
+            Datasets = new[]
             {
-                Labels = new[] {
-                    "29.04. Morgends", 
-                    "29.04. Mittags", 
-                    "29.04. Abends",
-                    "30.04. Morgends", 
-                    "30.04. Mittags", 
-                    "30.04. Abends",
-                },
-                Datasets = new[]
+                new ChartDataset<float>()
                 {
-                    new
-                    {
-                        Label = "Sensor readings",
-                        Data = new[]
-                        {
-                            300, 400, 250, 10, 300, 320
-                        },
-                        Fill = false,
-                        BorderColor = "rgb(75, 192, 192)",
-                        Tension = 0.1,
-                    }
+                    Label = "Sensor readings",
+                    Data = sensorData.Select(d => d.SensorReading),
+                    Fill = false,
+                    BorderColor = "rgb(75, 192, 192)",
+                    Tension = 0.1
                 }
             }
         };
+
+        var config = new LineChartConfig(chartData);
+        
         await JSRuntime.InvokeVoidAsync("buildChart", "irrigation-chart", config);
     }
+    
+    /*
+var chartData = new ChartData
+        {
+            Labels = new List<object>
+            {
+                "29.04. Morgends",
+                "29.04. Mittags",
+                "29.04. Abends",
+                "30.04. Morgends",
+                "30.04. Mittags",
+                "30.04. Abends",
+            },
+            Datasets = new List<ChartDataset>
+            {
+                new()
+                {
+                    Label = "Sensor Readings",
+                    Data = new List<object>
+                    {
+                        300, 400, 250, 10, 300, 320
+                    },
+                    Fill = false,
+                    BorderColor = "rgb(75, 192, 192)",
+                    Tension = 0.1
+                }
+            }
+        };
+        var lineConfig = new LineChartConfig(chartData, new ChartOptions());
+        
+        
+        var scatterChartData = new ChartData
+        {
+            Datasets = new()
+            {
+                new()
+                {
+                    Label = "Sensor readings",
+                    Data = new List<object>
+                    {
+                        new {X = -10, Y = 9},
+                        new {X = -6, Y = 10},
+                        new {X = -15, Y = 12},
+                        new {X = -3, Y = 7},
+                        new {X = -17, Y = 5},
+                        new {X = -8, Y = 10},
+                    },
+                    ShowLine = true,
+                    Fill = false,
+                    BorderColor = "rgb(75, 192, 192)",
+                    Tension = 0.1
+                }
+            }
+        };
+
+        var scatterConfig = new ScatterChartConfig(scatterChartData, new ChartOptions()
+        {
+            Scales = new
+            {
+                X = new
+                {
+                    Type = "linear",
+                    Position = "bottom"
+                }
+            }
+        });
+*/
 
 }
+
