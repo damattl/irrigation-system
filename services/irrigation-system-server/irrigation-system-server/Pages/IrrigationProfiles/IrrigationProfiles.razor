@@ -4,7 +4,8 @@
 
 @using IrrigationSystemServer.Models
 @using IrrigationSystemServer.Services
-@inject IrrigationProfileService _irrigationProfileService
+@inject IrrigationProfileService IrrigationProfileService
+@inject DeviceService DeviceService
 
 <h1>Irrigation-Profiles</h1>
 
@@ -28,6 +29,8 @@ else
             <th>Irrigation-Profile Id</th>
             <th>Plant Profile</th>
             <th>Device Id</th>
+            <th>Valve Pin</th>
+            <th>Sensor Pin</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -38,6 +41,8 @@ else
                 <td><a href="irrigation-profile/@irrigationProfile.IrrigationProfileId">@irrigationProfile.IrrigationProfileId</a></td>
                 <td>@irrigationProfile.PlantProfile!.Name</td>
                 <td>@irrigationProfile.DeviceId</td>
+                <td>@irrigationProfile.Valve?.PinId (@GetValvePinName(irrigationProfile).Result)</td>
+                <td>@irrigationProfile.MoistureSensor?.PinId (@GetSensorPinName(irrigationProfile).Result)</td>
                 <td>
                     <a class="text-decoration-none d-block" role="button">
                         <span><span class="oi oi-pencil" aria-hidden="true"></span> Edit</span>
@@ -57,13 +62,33 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _irrigationProfiles = await _irrigationProfileService.GetAllIrrigationProfilesAsync();
+        _irrigationProfiles = await IrrigationProfileService.GetAllIrrigationProfilesAsync();
     }
     
     private async void DeleteIrrigationProfile(IrrigationProfile irrigationProfile)
     {
-        await _irrigationProfileService.DeleteIrrigationProfileAsync(irrigationProfile);
+        await IrrigationProfileService.DeleteIrrigationProfileAsync(irrigationProfile);
         _irrigationProfiles?.Remove(irrigationProfile);
+    }
+
+    private async Task<string> GetSensorPinName(IrrigationProfile irrigationProfile)
+    {
+        if (irrigationProfile.MoistureSensor?.PinId == null)
+        {
+            return "";
+        }
+        var device = await DeviceService.GetDeviceByIdAsync(irrigationProfile.DeviceId);
+        return device?.Type?.SensorPinMap[irrigationProfile.MoistureSensor.PinId] ?? "unknown";
+    }
+    
+    private async Task<string> GetValvePinName(IrrigationProfile irrigationProfile)
+    {
+        if (irrigationProfile.Valve?.PinId == null)
+        {
+            return "";
+        }
+        var device = await DeviceService.GetDeviceByIdAsync(irrigationProfile.DeviceId);
+        return device?.Type?.ValvePinMap[irrigationProfile.Valve.PinId] ?? "unknown";
     }
 
 }

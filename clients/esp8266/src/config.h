@@ -10,9 +10,9 @@
 #define SENSOR_PIN A0
 #define MQTT_BROKER "192.168.2.100"
 #define MQTT_PORT 1884
+#define DEVICE_ID "2b31c942-b7a5-480d-ae9a-c31e85d99b37"
 
 extern String subscriptions[];
-extern int subscriptions_size;
-
+extern unsigned int subscriptions_size;
 
 #endif //ESP8266_CONFIG_H

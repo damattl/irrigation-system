@@ -45,7 +45,9 @@
                     <option value="" selected disabled hidden>Choose Valve here</option>
                     @foreach(var valve in _valves)
                     {
-                        <option value="@valve.ValveId">@valve.PinId</option>
+                        <option value="@valve.ValveId">
+                            @valve.PinId (@_deviceType?.ValvePinMap[@valve.PinId])
+                        </option>
                     }
                     
                 </select>
@@ -56,7 +58,9 @@
                     <option value="" selected disabled hidden>Choose Moisture-Sensor here</option>
                     @foreach(var moistureSensor in _moistureSensors)
                     {
-                        <option value="@moistureSensor.MoistureSensorId">@moistureSensor.PinId</option>
+                        <option value="@moistureSensor.MoistureSensorId">
+                            @moistureSensor.PinId (@_deviceType?.SensorPinMap[@moistureSensor.PinId])
+                        </option>
                     }
 
                 </select>
@@ -88,6 +92,8 @@
 
     private List<Valve> _valves = new();
     private List<MoistureSensor> _moistureSensors = new();
+    private DeviceType? _deviceType;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -106,6 +112,7 @@
         
         _valves = device.Valves ?? _valves;
         _moistureSensors = device.MoistureSensors ?? _moistureSensors;
+        _deviceType = device.Type;
 
         irrigationProfile.MoistureSensorId = _moistureSensors[0].MoistureSensorId;
         irrigationProfile.ValveId = _valves[0].ValveId;

@@ -12,17 +12,16 @@
         <div class="col-md-8">
             <div class="form-group">
                 <label for="name" class="control-label">Name</label>
-                <input id="name"  class="form-control" @bind="@deviceType.Name" />
+                <input id="name" class="form-control" @bind="@deviceType.Name" />
             </div>
             <div class="form-group">
-                <label for="sensors" class="control-label">Sensors</label>
-                <input id="sensors" type="number" class="form-control" @bind="@deviceType.SensorCount" />
+                <label for="sensor-pin-map" class="control-label">Sensor Pins</label>
+                <input id="sensor-pin-map" class="form-control" @bind="@SensorPinMap" />
             </div>
             <div class="form-group">
-                <label for="valves" class="control-label">Valves</label>
-                <input id="valves" type="number" class="form-control" @bind="@deviceType.ValveCount" />
+                <label for="valve-pin-map" class="control-label">Valve Pins</label>
+                <input id="valve-pin-map" class="form-control" @bind="@ValvePinMap" />
             </div>
-
         </div>
     </div>
 
@@ -39,13 +38,50 @@
 @code {
     readonly DeviceType deviceType = new DeviceType();
 
+    private string _sensorPinMap = "";
+    public string SensorPinMap
+    {
+        get => _sensorPinMap;
+        set
+        {
+            deviceType.SensorPinMap = ParseMap(value);
+            _sensorPinMap = value;
+        }
+    }
+
+    private string _valvePinMap = "";
+    public string ValvePinMap
+    {
+        get => _valvePinMap;
+        set
+        {
+            deviceType.ValvePinMap = ParseMap(value);
+            _valvePinMap = value;
+        }
+    }
+
     private async void CreateDeviceType()
     {
         await _deviceTypeService.InsertDeviceTypeAsync(deviceType);
         _navigationManager.NavigateTo("device-types");
     }
-    void Cancel()
+    private void Cancel()
     {
         _navigationManager.NavigateTo("device-types");
+    }
+
+    private Dictionary<int, string> ParseMap(string value)
+    {
+        var strArr = value.Split("/");
+        if (strArr.Length == 1)
+        {
+            strArr = value.Split(",");
+        }
+        var dict = new Dictionary<int, string>();
+        for (var i = 0; i < strArr.Length; i++)
+        {
+            dict[i + 1] = strArr[i];
+        }
+        return dict;
     }
 }

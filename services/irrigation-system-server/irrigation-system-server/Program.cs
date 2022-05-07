@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using IrrigationSystemServer.Areas.Identity;
+using IrrigationSystemServer.BackgroundServices;
 using IrrigationSystemServer.Data;
 using IrrigationSystemServer.Models;
 using IrrigationSystemServer.Services;
@@ -34,6 +35,8 @@ builder.Services.AddGrpcClient<BrokerGrpc.BrokerGrpcClient>(opt =>
 {
     opt.Address = new Uri("https://localhost:7220");
 });
+
+builder.Services.AddHostedService<MeasurementService>();
 
 var app = builder.Build();
 

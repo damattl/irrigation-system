@@ -2,7 +2,8 @@
 
 public class ChartOptions
 {
-    public bool MainaintainAspectRatio { get; set; } = true;
+    public bool MaintainAspectRatio { get; set; } = false;
+    public bool Responsive { get; set; } = true;
     public object Scales { get; set; }
     public ChartOptionsElements Elements { get; set; }
 }

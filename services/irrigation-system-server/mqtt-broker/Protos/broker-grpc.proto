@@ -10,12 +10,12 @@ service BrokerGrpc {
 
 message SensorInfo {
   string client_id = 1;
-  string sensor_id = 2;
+  int32 sensor_pin = 2;
 }
 
 message ValveInfo {
   string client_id = 1;
-  string valve_id = 2;
+  int32 valve_pin = 2;
 }
 
 message ReadSensorRequest {

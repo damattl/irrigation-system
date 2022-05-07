@@ -4,6 +4,5 @@
 
 #include "config.h"
 
-String subscriptions[] = {"/home/irrigation-system/ESP8266Client-testing/#"};
-
-int subscriptions_size = sizeof(subscriptions);
+String subscriptions[] = {"/home/irrigation-system/"+ String(DEVICE_ID) +"/#"};
+unsigned int subscriptions_size = sizeof(subscriptions) / sizeof(subscriptions[0]);

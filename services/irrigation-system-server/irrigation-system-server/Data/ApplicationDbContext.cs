@@ -1,6 +1,7 @@
 ﻿using IrrigationSystemServer.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 
 namespace IrrigationSystemServer.Data;
@@ -24,6 +25,15 @@ public class ApplicationDbContext : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
+        builder.Entity<DeviceType>()
+            .Property(t => t.ValvePinMap)
+            .HasConversion(
+                d => JsonConvert.SerializeObject(d),
+                d => JsonConvert.DeserializeObject<Dictionary<int, string>>(d)!);
+        builder.Entity<DeviceType>()
+            .Property(t => t.SensorPinMap)
+            .HasConversion(
+                d => JsonConvert.SerializeObject(d),
+                d => JsonConvert.DeserializeObject<Dictionary<int, string>>(d)!);
     }
 }

@@ -3,30 +3,25 @@
 #include <mqtt_callback_handlers.h>
 #include <moisture_sensor.h>
 
-
 void callback(char* topic, byte* payload, unsigned int length) {
     String topic_str = String(topic);
     String msg;
-     for (byte i = 0; i < length; i++) {
+    for (byte i = 0; i < length; i++) {
         char tmp = char(payload[i]);
         msg += tmp;
     }
-    // Serial.println(msg);
+
+    Serial.print(topic_str);
+    Serial.print(": ");
+    Serial.println(msg);
 
 
-    if (isTopic("/home/irrigation-system/ESP8266Client-testing/valves/#", topic_str)) {
+    if (isTopic("/home/irrigation-system/"+ String(DEVICE_ID) +"/valves/#", topic_str)) {
         handleValve(topic_str, msg);
     }
-    if (isTopic("/home/irrigation-system/ESP8266Client-testing/moisture-sensors/#", topic_str)) {
+    if (isTopic("/home/irrigation-system/"+ String(DEVICE_ID) +"/moisture-sensors/#", topic_str)) {
         handleMoistureSensor(topic_str, msg);
     }
-
-    /* if (String(topic) == "/home/irrigation-system/magnet-pin") {
-        handle_magnet_pin(MAGNET_PIN, msg);
-    } else {
-        handle_message(msg);
-    } */
-
 }
 
 void setup() {

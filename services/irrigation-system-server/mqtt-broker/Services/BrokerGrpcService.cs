@@ -13,7 +13,7 @@ public class BrokerGrpcService : BrokerGrpc.BrokerGrpcBase
 
     public override Task<Empty> OpenValve(OpenValveRequest request, ServerCallContext context)
     {
-        var topic = $"/home/irrigation-system/{request.Info.ClientId}/valves/{request.Info.ValveId}";
+        var topic = $"/home/irrigation-system/{request.Info.ClientId}/valves/{request.Info.ValvePin}";
         var payload = $"1:{request.Duration}";
         _broker.SendMessage(topic, payload);
         return Task.FromResult(new Empty());
@@ -21,7 +21,7 @@ public class BrokerGrpcService : BrokerGrpc.BrokerGrpcBase
     
     public override Task<Empty> CloseValve(CloseValveRequest request, ServerCallContext context)
     {
-        var topic = $"/home/irrigation-system/{request.Info.ClientId}/valves/{request.Info.ValveId}";
+        var topic = $"/home/irrigation-system/{request.Info.ClientId}/valves/{request.Info.ValvePin}";
         var payload = $"0";
         _broker.SendMessage(topic, payload);
         return Task.FromResult(new Empty());
@@ -29,7 +29,7 @@ public class BrokerGrpcService : BrokerGrpc.BrokerGrpcBase
 
     public override Task<Empty> ReadSensor(ReadSensorRequest request, ServerCallContext context)
     {
-        var topic = $"/home/irrigation-system/{request.Info.ClientId}/moisture-sensors/{request.Info.SensorId}";
+        var topic = $"/home/irrigation-system/{request.Info.ClientId}/moisture-sensors/{request.Info.SensorPin}";
         var payload = "1"; // TODO: Right Payload for command?
         _broker.SendMessage(topic, payload);
         return Task.FromResult(new Empty());

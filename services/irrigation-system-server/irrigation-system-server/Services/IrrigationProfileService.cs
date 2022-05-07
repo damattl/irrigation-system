@@ -7,16 +7,20 @@ namespace IrrigationSystemServer.Services;
 public class IrrigationProfileService
 {
     private readonly ApplicationDbContext _context;
+    private readonly BrokerGrpc.BrokerGrpcClient _grpc;
 
-    public IrrigationProfileService(ApplicationDbContext context)
+    public IrrigationProfileService(ApplicationDbContext context, BrokerGrpc.BrokerGrpcClient grpc)
     {
         _context = context;
+        _grpc = grpc;
     }
 
     public async Task<List<IrrigationProfile>> GetAllIrrigationProfilesAsync()
     {
         return await _context.IrrigationProfiles
             .Include(p => p.PlantProfile)
+            .Include(p => p.MoistureSensor)
+            .Include(p => p.Valve)
             .ToListAsync();
     }
     
@@ -24,6 +28,8 @@ public class IrrigationProfileService
     {
         return await _context.IrrigationProfiles
             .Include(p => p.PlantProfile)
+            .Include(p => p.Valve)
+            .Include(p => p.MoistureSensor)
             .FirstAsync(p => p.IrrigationProfileId == id);
     }
 
@@ -40,5 +46,10 @@ public class IrrigationProfileService
         _context.IrrigationProfiles.Remove(irrigationProfile);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public void OpenValve(OpenValveRequest request)
+    {
+        _grpc.OpenValve(request);
     }
 }

@@ -21,7 +21,8 @@ else
     <h1>Irrigation-Profile für @_irrigationProfile.PlantProfile.Name</h1>
     <div class="irrigation-chart-container">
         <canvas id="irrigation-chart"></canvas>  
-    </div>                                                                
+    </div>  
+    <button @onclick="OpenValve">Open Valve</button>
 }
 
 
@@ -42,9 +43,13 @@ else
         {
             return;
         }
-        var rawData = SensorTestDataBuilder.Build(_irrigationProfile.MoistureSensorId, 10);
+        
 
-        await CreateChart(rawData);
+        if (firstRender)
+        {
+            var rawData = SensorTestDataBuilder.Build(_irrigationProfile.MoistureSensorId, 10);
+            await CreateChart(rawData);
+        }
     }
 
     private async Task CreateChart(List<MoistureSensorData> sensorData)
@@ -65,9 +70,27 @@ else
             }
         };
 
-        var config = new LineChartConfig(chartData);
+        var config = new LineChartConfig(chartData, new ChartOptions());
         
         await JSRuntime.InvokeVoidAsync("buildChart", "irrigation-chart", config);
+    }
+
+    private void OpenValve()
+    {
+        if (_irrigationProfile == null || _irrigationProfile?.Valve == null)
+        {
+            return;
+        }
+        var request = new OpenValveRequest
+        {
+            Duration = 10,
+            Info = new ValveInfo
+            {
+                ClientId = _irrigationProfile?.DeviceId.ToString(),
+                ValvePin = _irrigationProfile!.Valve!.PinId,  // Rename to ValvePIN
+            }
+        };
+        _irrigationProfileService.OpenValve(request);
     }
     
     /*

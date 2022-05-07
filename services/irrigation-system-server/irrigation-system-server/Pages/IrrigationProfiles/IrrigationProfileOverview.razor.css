@@ -1,3 +1,4 @@
 ﻿.irrigation-chart-container {
-    height: 400px;
+    height: 60vh;
+    position: relative;
 }

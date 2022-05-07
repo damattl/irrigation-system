@@ -25,6 +25,7 @@ public class DeviceService
         return await _context.Devices
             .Include(d => d.Valves)
             .Include(d => d.MoistureSensors)
+            .Include(d => d.Type)
             .FirstOrDefaultAsync(d => d.DeviceId == deviceId);
     }
 
