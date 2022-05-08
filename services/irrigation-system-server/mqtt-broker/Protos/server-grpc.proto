@@ -7,6 +7,6 @@ service ServerGrpc {
 
 message SensorData {
   string client_id = 1;
-  string sensor_id = 2;
+  int32 sensor_pin = 2;
   float sensor_reading = 3;
 }

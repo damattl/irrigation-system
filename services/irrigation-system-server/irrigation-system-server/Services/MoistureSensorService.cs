@@ -13,6 +13,11 @@ public class MoistureSensorService
         _context = context;
     }
 
+    public async Task<MoistureSensor?> GetMoistureSensorAsync(Guid moistureSensorId)
+    {
+        return await _context.MoistureSensors.FindAsync(moistureSensorId);
+    }
+    
     public async Task<List<MoistureSensor>> GetAllMoistureSensorsAsync()
     {
         return await _context.MoistureSensors.ToListAsync();
@@ -30,5 +35,15 @@ public class MoistureSensorService
         _context.MoistureSensors.Remove(moistureSensor);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<List<MoistureSensorData>> GetMoistureSensorDataAsync(Guid moistureSensorId, int count)
+    {
+        return await _context.MoistureSensorData
+            .Where(d => d.MoistureSensorId == moistureSensorId)
+            .OrderByDescending(d => d.TimeStamp)
+            .Take(count)
+            .Reverse()
+            .ToListAsync();
     }
 }

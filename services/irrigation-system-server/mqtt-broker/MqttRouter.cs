@@ -64,7 +64,7 @@ public class MqttRouter
         Console.WriteLine("SensorReading: {0}" ,sensorReading);
         
         await _client.SendSensorDataAsync(
-            new SensorData{ClientId = clientId, SensorId = sensorId, SensorReading = sensorReading}
+            new SensorData{ClientId = clientId, SensorPin = Int32.Parse(sensorId), SensorReading = sensorReading}
         );
     }
 }

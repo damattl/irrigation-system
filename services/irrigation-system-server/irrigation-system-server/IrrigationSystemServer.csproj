@@ -63,4 +63,8 @@
       <_ContentIncludedByDefault Remove="Pages\Movies\Index.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Utilities" />
+    </ItemGroup>
+
 </Project>

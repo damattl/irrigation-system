@@ -6,8 +6,11 @@
 @using IrrigationSystemServer.Services
 @using IrrigationSystemServer.Charts
 @using System.Globalization
-@inject IrrigationProfileService _irrigationProfileService
-@inject IJSRuntime JSRuntime
+@using System.Diagnostics.Metrics
+@using IrrigationSystemServer.BackgroundServices
+@inject IrrigationProfileService IrrigationProfileService
+@inject MoistureSensorService MoistureSensorService
+@inject IJSRuntime JsRuntime
 
 
 @if (_irrigationProfile == null)
@@ -18,11 +21,12 @@
 }
 else
 {
-    <h1>Irrigation-Profile für @_irrigationProfile.PlantProfile.Name</h1>
+    <h1>Irrigation-Profile für @_irrigationProfile?.PlantProfile?.Name</h1>
     <div class="irrigation-chart-container">
         <canvas id="irrigation-chart"></canvas>  
     </div>  
     <button @onclick="OpenValve">Open Valve</button>
+    <button @onclick="ReadSensor">Read Sensor</button>
 }
 
 
@@ -34,22 +38,27 @@ else
     
     protected override async Task OnInitializedAsync()
     {
-        _irrigationProfile = await _irrigationProfileService.GetIrrigationProfileAsync(Id);
+        _irrigationProfile = await IrrigationProfileService.GetIrrigationProfileAsync(Id);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            RenderChart();
+        }
+        return Task.CompletedTask;
+    }
+
+    private async void RenderChart()
     {
         if (_irrigationProfile == null)
         {
             return;
         }
-        
-
-        if (firstRender)
-        {
-            var rawData = SensorTestDataBuilder.Build(_irrigationProfile.MoistureSensorId, 10);
-            await CreateChart(rawData);
-        }
+        var data = await MoistureSensorService
+            .GetMoistureSensorDataAsync(_irrigationProfile.MoistureSensorId, 20);
+        await CreateChart(data);
     }
 
     private async Task CreateChart(List<MoistureSensorData> sensorData)
@@ -70,9 +79,18 @@ else
             }
         };
 
-        var config = new LineChartConfig(chartData, new ChartOptions());
+        var config = new LineChartConfig(chartData, new ChartOptions
+        {
+            Scales = new
+            {
+                Y = new 
+                {
+                    Reverse = true
+                }
+            }
+        });
         
-        await JSRuntime.InvokeVoidAsync("buildChart", "irrigation-chart", config);
+        await JsRuntime.InvokeVoidAsync("buildChart", "irrigation-chart", config);
     }
 
     private void OpenValve()
@@ -90,8 +108,31 @@ else
                 ValvePin = _irrigationProfile!.Valve!.PinId,  // Rename to ValvePIN
             }
         };
-        _irrigationProfileService.OpenValve(request);
+        IrrigationProfileService.OpenValve(request);
     }
+
+    private async void ReadSensor()
+    {
+        if (_irrigationProfile == null || _irrigationProfile?.MoistureSensor == null)
+        {
+            return;
+        }
+        var request = new ReadSensorRequest
+        {
+            Info = new SensorInfo
+            {
+                ClientId = _irrigationProfile.DeviceId.ToString(),
+                SensorPin = _irrigationProfile.MoistureSensor.PinId,
+            }
+        };
+        IrrigationProfileService.ReadSensor(request);
+
+        await Task.Delay(TimeSpan.FromSeconds(2));
+        
+        RenderChart();
+    }
+
+    
     
     /*
 var chartData = new ChartData

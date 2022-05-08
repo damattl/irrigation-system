@@ -66,7 +66,7 @@ public class MeasurementService : IHostedService, IDisposable
                     }
                 };
 
-                await brokerGrpc.ReadSensorAsync(request);
+                brokerGrpc.ReadSensor(request);
             }
         }
         
@@ -109,7 +109,7 @@ public class MeasurementService : IHostedService, IDisposable
                     Duration = irrigationProfile.PlantProfile.WaterConsumption * 10 // Opening factor
                 };
 
-                await brokerGrpc.OpenValveAsync(request);
+                brokerGrpc.OpenValve(request);
             }
         }
     }

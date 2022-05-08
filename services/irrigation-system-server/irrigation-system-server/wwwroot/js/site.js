@@ -5,6 +5,7 @@ window.buildChart = (id, config) => {
         profile_chart.destroy()
         profile_chart = null
     }
+    console.log(config)
     let ctx = document.getElementById(id).getContext('2d')
     profile_chart = new Chart(ctx, config)
 }

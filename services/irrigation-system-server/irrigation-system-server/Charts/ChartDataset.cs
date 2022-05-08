@@ -8,4 +8,5 @@ public class ChartDataset<T>
     public string? BorderColor { get; set; }
     public double? Tension { get; set; }
     public bool? ShowLine { get; set; }
+    public string YAxisId = "y";
 }
