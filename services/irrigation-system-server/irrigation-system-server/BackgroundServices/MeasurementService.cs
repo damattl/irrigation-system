@@ -87,12 +87,11 @@ public class MeasurementService : IHostedService, IDisposable
         
             var profiles = await context.IrrigationProfiles
                 .Include(p => p.Valve)
-                .Include(p => p.PlantProfile)
                 .ToListAsync();
         
             foreach (var irrigationProfile in profiles)
             {
-                if (irrigationProfile.Valve == null || irrigationProfile.PlantProfile == null)
+                if (irrigationProfile.Valve == null)
                 {
                     continue;
                 }
@@ -106,7 +105,7 @@ public class MeasurementService : IHostedService, IDisposable
                         ClientId = irrigationProfile.DeviceId.ToString(),
                         ValvePin = irrigationProfile.Valve.PinId
                     },
-                    Duration = irrigationProfile.PlantProfile.WaterConsumption * 10 // Opening factor
+                    Duration = irrigationProfile.WaterConsumption * 10 // Opening factor
                 };
 
                 brokerGrpc.OpenValve(request);

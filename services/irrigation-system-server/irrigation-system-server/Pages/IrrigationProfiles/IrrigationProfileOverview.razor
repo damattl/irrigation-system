@@ -5,9 +5,6 @@
 @using IrrigationSystemServer.Models
 @using IrrigationSystemServer.Services
 @using IrrigationSystemServer.Charts
-@using System.Globalization
-@using System.Diagnostics.Metrics
-@using IrrigationSystemServer.BackgroundServices
 @inject IrrigationProfileService IrrigationProfileService
 @inject MoistureSensorService MoistureSensorService
 @inject IJSRuntime JsRuntime
@@ -21,7 +18,7 @@
 }
 else
 {
-    <h1>Irrigation-Profile für @_irrigationProfile?.PlantProfile?.Name</h1>
+    <h1>Irrigation-Profile für @_irrigationProfile?.Name</h1>
     <div class="irrigation-chart-container">
         <canvas id="irrigation-chart"></canvas>  
     </div>  

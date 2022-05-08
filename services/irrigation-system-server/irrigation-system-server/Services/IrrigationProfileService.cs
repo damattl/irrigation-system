@@ -18,7 +18,6 @@ public class IrrigationProfileService
     public async Task<List<IrrigationProfile>> GetAllIrrigationProfilesAsync()
     {
         return await _context.IrrigationProfiles
-            .Include(p => p.PlantProfile)
             .Include(p => p.MoistureSensor)
             .Include(p => p.Valve)
             .ToListAsync();
@@ -27,7 +26,6 @@ public class IrrigationProfileService
     public async Task<IrrigationProfile?> GetIrrigationProfileAsync(Guid id)
     {
         return await _context.IrrigationProfiles
-            .Include(p => p.PlantProfile)
             .Include(p => p.Valve)
             .Include(p => p.MoistureSensor)
             .FirstAsync(p => p.IrrigationProfileId == id);

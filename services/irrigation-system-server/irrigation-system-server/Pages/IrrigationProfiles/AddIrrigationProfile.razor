@@ -2,10 +2,9 @@
 @using IrrigationSystemServer.Models
 @using IrrigationSystemServer.Services
 @using Microsoft.AspNetCore.Components
-@inject NavigationManager _navigationManager
-@inject IrrigationProfileService _irrigationProfileService
-@inject DeviceService _deviceService
-@inject PlantProfileService _plantProfileService
+@inject NavigationManager NavigationManager
+@inject IrrigationProfileService IrrigationProfileService
+@inject DeviceService DeviceService
 
 
 <h2>Add Irrigation-Profile</h2>
@@ -15,48 +14,40 @@
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
+                <label for="name" class="control-label">Name</label>
+                <input id="name" class="form-control" @bind="@_irrigationProfile.Name" />
+            </div>
+            <div class="form-group">
                 <label for="device" class="control-label">Device</label>
-                <select @bind="_deviceId" class="form-control" id="device">
+                <select @bind="DeviceId" class="form-control" id="device">
                     @if (_devices != null)
                     {
-                        @foreach(var device in _devices)
+                        @foreach (var device in _devices)
                         {
                             <option value="@device.DeviceId">@device.DeviceId</option>
                         }
                     }
                 </select>
             </div>
-            <div class="form-group">
-                <label for="plant-profile" class="control-label">Plant-Profile</label>
-                <select @bind="irrigationProfile.PlantProfileId" class="form-control" id="plant-profile">
-                    <option value="" selected disabled hidden>Choose Device here</option>
-                    @if (_plantProfiles != null)
-                    {
-                        @foreach (var plantProfile in _plantProfiles)
-                        {
-                            <option value="@plantProfile.PlantProfileId">@plantProfile.Name</option>
-                        }
-                    }
-                </select>
-            </div>
+
             <div class="form-group">
                 <label for="valve" class="control-label">Valve</label>
-                <select @bind="irrigationProfile.ValveId" class="form-control" id="valve">
+                <select @bind="_irrigationProfile.ValveId" class="form-control" id="valve">
                     <option value="" selected disabled hidden>Choose Valve here</option>
-                    @foreach(var valve in _valves)
+                    @foreach (var valve in _valves)
                     {
                         <option value="@valve.ValveId">
                             @valve.PinId (@_deviceType?.ValvePinMap[@valve.PinId])
                         </option>
                     }
-                    
+
                 </select>
             </div>
             <div class="form-group">
                 <label for="moisture-sensor" class="control-label">Moisture-Sensor</label>
-                <select @bind="irrigationProfile.MoistureSensorId" class="form-control" id="moisture-sensor">
+                <select @bind="_irrigationProfile.MoistureSensorId" class="form-control" id="moisture-sensor">
                     <option value="" selected disabled hidden>Choose Moisture-Sensor here</option>
-                    @foreach(var moistureSensor in _moistureSensors)
+                    @foreach (var moistureSensor in _moistureSensors)
                     {
                         <option value="@moistureSensor.MoistureSensorId">
                             @moistureSensor.PinId (@_deviceType?.SensorPinMap[@moistureSensor.PinId])
@@ -64,6 +55,14 @@
                     }
 
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="water-consumption" class="control-label">Water Consumption</label>
+                <input id="water-consumption" class="form-control" type="number" @bind="@_irrigationProfile.WaterConsumption" />
+            </div>
+            <div class="form-group">
+                <label for="threshold" class="control-label">Threshold</label>
+                <input id="threshold" class="form-control" type="number" @bind="@_irrigationProfile.Threshold" />
             </div>
         </div>
     </div>
@@ -79,16 +78,15 @@
 </form>
 
 @code {
-    readonly IrrigationProfile irrigationProfile = new IrrigationProfile();
+    private readonly IrrigationProfile _irrigationProfile = new IrrigationProfile();
 
-    private Guid _deviceId
+    private Guid DeviceId
     {
-        get => irrigationProfile.DeviceId;
+        get => _irrigationProfile.DeviceId;
         set => SelectedDevice(value);
     }
     
     private List<Device>? _devices;
-    private List<PlantProfile>? _plantProfiles;
 
     private List<Valve> _valves = new();
     private List<MoistureSensor> _moistureSensors = new();
@@ -97,14 +95,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _devices = await _deviceService.GetAllDevicesAsync();
-        _plantProfiles = await _plantProfileService.GetAllPlantProfilesAsync();
+        _devices = await DeviceService.GetAllDevicesAsync();
     }
 
     private async void SelectedDevice(Guid deviceId)
     {
-        irrigationProfile.DeviceId = deviceId;
-        var device = await _deviceService.GetDeviceByIdAsync(irrigationProfile.DeviceId);
+        _irrigationProfile.DeviceId = deviceId;
+        var device = await DeviceService.GetDeviceByIdAsync(_irrigationProfile.DeviceId);
         if (device is null)
         {
             return;
@@ -114,20 +111,20 @@
         _moistureSensors = device.MoistureSensors ?? _moistureSensors;
         _deviceType = device.Type;
 
-        irrigationProfile.MoistureSensorId = _moistureSensors[0].MoistureSensorId;
-        irrigationProfile.ValveId = _valves[0].ValveId;
+        _irrigationProfile.MoistureSensorId = _moistureSensors[0].MoistureSensorId;
+        _irrigationProfile.ValveId = _valves[0].ValveId;
 
     }
 
 
     private async void CreateIrrigationProfile()
     {
-        Console.WriteLine(irrigationProfile.MoistureSensorId);
-        await _irrigationProfileService.InsertIrrigationProfileAsync(irrigationProfile);
-        _navigationManager.NavigateTo("irrigation-profiles");
+        Console.WriteLine(_irrigationProfile.MoistureSensorId);
+        await IrrigationProfileService.InsertIrrigationProfileAsync(_irrigationProfile);
+        NavigationManager.NavigateTo("irrigation-profiles");
     }
     void Cancel()
     {
-        _navigationManager.NavigateTo("irrigation-profiles");
+        NavigationManager.NavigateTo("irrigation-profiles");
     }
 }

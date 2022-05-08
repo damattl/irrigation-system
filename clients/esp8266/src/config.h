@@ -10,7 +10,7 @@
 #define SENSOR_PIN A0
 #define MQTT_BROKER "192.168.2.100"
 #define MQTT_PORT 1884
-#define DEVICE_ID "2b31c942-b7a5-480d-ae9a-c31e85d99b37"
+#define DEVICE_ID "99e2dffb-5957-4d76-abf3-adbd57f738c4"
 
 extern String subscriptions[];
 extern unsigned int subscriptions_size;

@@ -18,7 +18,6 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Valve> Valves { get; set; }
     public DbSet<MoistureSensor> MoistureSensors { get; set; }
     public DbSet<MoistureSensorData> MoistureSensorData { get; set; }
-    public DbSet<PlantProfile> PlantProfiles { get; set; }
     public DbSet<IrrigationProfile> IrrigationProfiles { get; set; }
     
 

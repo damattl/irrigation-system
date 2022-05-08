@@ -27,7 +27,6 @@ builder.Services
 builder.Services.AddScoped<DeviceTypeService>();
 builder.Services.AddScoped<DeviceService>();
 builder.Services.AddScoped<MoistureSensorService>();
-builder.Services.AddScoped<PlantProfileService>();
 builder.Services.AddScoped<IrrigationProfileService>();
 
 builder.Services.AddGrpc();

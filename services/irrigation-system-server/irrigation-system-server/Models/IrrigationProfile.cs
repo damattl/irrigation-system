@@ -9,8 +9,9 @@ public class IrrigationProfile
     public MoistureSensor? MoistureSensor { get; set; }
     public Guid ValveId { get; set; }
     public Valve? Valve { get; set; }
-    public Guid PlantProfileId { get; set; }
-    public PlantProfile? PlantProfile { get; set; }
+    public string? Name { get; set; }
+    public int WaterConsumption { get; set;  }
+    public int Threshold { get; set; }
     
     // TODO: Add SensorData
 }
