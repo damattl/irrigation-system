@@ -40,11 +40,13 @@ void handleValve(String& topic, String& msg) {
         Serial.println(pin);
         if (msg_vector.size() > 1) {
             int time_opened = msg_vector[1].toInt() * 1000;
-            delay(time_opened);
+            taskHandler.add([](void *data) {
+                digitalWrite(*(uint8_t*)data, LOW);
+            }, &pin,time_opened);
         } else {
             delay(1000);
         }
-        digitalWrite(pin, LOW);
+
     }
     if (msg_vector[0] == "0") {
         digitalWrite(pin, LOW);

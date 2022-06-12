@@ -6,6 +6,8 @@
 #include "utilities.h"
 #include "moisture_sensor.h"
 #include "connection_handlers.h"
+#include "task_handler.h"
+#include "time_makros.h"
 #include "pins.h"
 void handleMoistureSensor(String& topic, String& msg);
 void handleValve(String& topic, String& msg);

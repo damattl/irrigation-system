@@ -14,8 +14,8 @@ int TaskHandler::add(Task &task) {
     return -1; // TODO: Handle overflow error;
 }
 
-int TaskHandler::add(void (*callback_ptr)(), unsigned long execute_in) {
-    Task task(millis() + execute_in, callback_ptr);
+int TaskHandler::add(task_cb_t cb, void *data, unsigned long execute_in) {
+    Task task(millis() + execute_in, cb, data);
     return this->add(task);
 }
 

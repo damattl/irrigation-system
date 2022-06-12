@@ -1,7 +1,10 @@
 #include <Arduino.h>
-#include <connection_handlers.h>
-#include <mqtt_callback_handlers.h>
-#include <moisture_sensor.h>
+#include "connection_handlers.h"
+#include "mqtt_callback_handlers.h"
+#include "moisture_sensor.h"
+#include "task_handler.h"
+
+
 
 void callback(char* topic, byte* payload, unsigned int length) {
     String topic_str = String(topic);
@@ -52,7 +55,7 @@ void loop() {
     // delay(5000);
 
     client.loop();
-
+    taskHandler.loop();
 }
 
 
