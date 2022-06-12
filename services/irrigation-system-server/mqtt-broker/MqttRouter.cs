@@ -16,6 +16,10 @@ public class MqttRouter
     }
     public Task HandleInbound(InterceptingPacketEventArgs eventArgs)
     {
+        if (eventArgs.Packet is MqttConnectPacket connectPacket)
+        {
+            Console.WriteLine(connectPacket.ClientId + " just connected!");
+        }
         if (eventArgs.Packet is MqttPublishPacket packet)
         {
             Console.WriteLine(packet.Topic);

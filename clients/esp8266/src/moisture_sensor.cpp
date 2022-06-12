@@ -7,6 +7,7 @@
 
 float readSensor(unsigned int sensor_pin) {
     Serial.println("Reading sensor");
+    // pinMode(sensor_pin, OUTPUT);
     digitalWrite(sensor_pin, HIGH);
 
     float sensor_value = 0;
@@ -24,6 +25,6 @@ float readSensor(unsigned int sensor_pin) {
 void publishSensorData(float sensor_data, PubSubClient& client, String& sensor_id) {
     char payload[8];
     dtostrf(sensor_data, 6, 2, payload);
-    String topic = "/home/irrigation-system/ESP8266Client-testing/moisture-sensors/" + sensor_id;
+    String topic = "/home/irrigation-system/"+ String(DEVICE_ID) +"/moisture-sensors/" + sensor_id;
     client.publish(topic.c_str(), payload);
 }

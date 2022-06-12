@@ -37,7 +37,7 @@ void setup() {
     // Configuring Sensor-Pins
     pinMode(D1, OUTPUT);
     pinMode(D2, OUTPUT);
-    pinMode(D4, OUTPUT);
+    pinMode(D8, OUTPUT);
     // digitalWrite(MAGNET_PIN, HIGH);
 }
 

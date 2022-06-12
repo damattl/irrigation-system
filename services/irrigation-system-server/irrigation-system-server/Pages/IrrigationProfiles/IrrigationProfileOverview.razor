@@ -54,7 +54,7 @@ else
             return;
         }
         var data = await MoistureSensorService
-            .GetMoistureSensorDataAsync(_irrigationProfile.MoistureSensorId, 20);
+            .GetMoistureSensorDataAsync(_irrigationProfile.MoistureSensorId, 60);
         await CreateChart(data);
     }
 
@@ -82,7 +82,13 @@ else
             {
                 Y = new 
                 {
-                    Reverse = true
+                    SuggestedMin = 300,
+                    SuggestedMax = 800,
+                    Reverse = true,
+                    Ticks = new
+                    {
+                        StepSize = 50,
+                    }
                 }
             }
         });

@@ -21,7 +21,7 @@ std::map<String, Pin> pin_map = {
 std::map<String, u_int8_t> sensor_pins = {
         {"1", D1},
         {"2", D2},
-        {"3", D4},
+        {"3", D8},
 };
 
 std::map<String, u_int8_t> valve_pins = {

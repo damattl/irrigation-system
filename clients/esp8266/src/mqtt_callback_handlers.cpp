@@ -36,6 +36,8 @@ void handleValve(String& topic, String& msg) {
 
     if (msg_vector[0] == "1") {
         digitalWrite(pin, HIGH);
+        Serial.print("Opening valve at pin: ");
+        Serial.println(pin);
         if (msg_vector.size() > 1) {
             int time_opened = msg_vector[1].toInt() * 1000;
             delay(time_opened);
