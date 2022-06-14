@@ -3,9 +3,9 @@
 //
 #include "task_handler.h"
 
-int TaskHandler::add(Task &task) {
+int TaskHandler::add(task_t &task) {
     for (int i = 0; i < MAX_TASKS; i++) {
-        Task* t = this->scheduled_tasks[i];
+        task_t* t = this->scheduled_tasks[i];
         if (t != nullptr) {
             this->scheduled_tasks[i] = &task;
             return i;
@@ -15,7 +15,7 @@ int TaskHandler::add(Task &task) {
 }
 
 int TaskHandler::add(task_cb_t cb, void *data, unsigned long execute_in) {
-    Task task(millis() + execute_in, cb, data);
+    task_t task{millis() + execute_in, cb, data};
     return this->add(task);
 }
 
@@ -26,9 +26,9 @@ void TaskHandler::remove(int index) {
 void TaskHandler::loop() {
     for (int i = 0; i < MAX_TASKS; i++) {
         unsigned long now = millis();
-        Task* task = this->scheduled_tasks[i];
+        task_t* task = this->scheduled_tasks[i];
         if (now >= task->scheduled_time) {
-            task->execute();
+            executeTask(*task);
             this->remove(i);
         }
     }

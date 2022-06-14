@@ -6,15 +6,14 @@
 #define ESP8266_TASK_H
 
 typedef void (*task_cb_t)(void *data);
-
-class Task {
-public:
-    Task(unsigned long scheduled_time, task_cb_t cb, void *data);
-    void execute() const;
+typedef struct task_t task_t;
+struct task_t {
     unsigned long scheduled_time;
     task_cb_t cb;
     void *data;
 };
+
+extern void executeTask(task_t &task);
 
 
 

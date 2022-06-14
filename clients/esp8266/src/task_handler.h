@@ -9,12 +9,12 @@
 class TaskHandler {
 public:
     int add(task_cb_t cb, void *data, unsigned long execute_in);
-    int add(Task &task);
+    int add(task_t &task);
     void remove(int index);
     void loop();
 private:
     static const int MAX_TASKS = 100;
-    Task* scheduled_tasks[MAX_TASKS] = { nullptr }; // TODO: Is this enough space or even to much?
+    task_t* scheduled_tasks[MAX_TASKS] = { nullptr }; // TODO: Is this enough space or even to much?
 };
 
 extern TaskHandler taskHandler;
