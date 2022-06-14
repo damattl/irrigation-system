@@ -26,6 +26,7 @@ void subscribeToTopics() {
         Serial.print("Subscribing to: ");
         Serial.println(subscriptions[i]);
     }
+    Serial.println("Subscribed to all topics.");
 }
 
 void reconnect() {

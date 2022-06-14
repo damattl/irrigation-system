@@ -39,10 +39,14 @@ void handleValve(String& topic, String& msg) {
         Serial.print("Opening valve at pin: ");
         Serial.println(pin);
         if (msg_vector.size() > 1) {
-            int time_opened = msg_vector[1].toInt() * 1000;
-            taskHandler.add([](void *data) {
-                digitalWrite(*(uint8_t*)data, LOW);
-            }, &pin,time_opened);
+            unsigned long time_opened = msg_vector[1].toInt() * 1000;
+            taskHandler
+                .add([](void *data) {
+                    int p = *(uint8_t*)data;
+                    digitalWrite(p, LOW);
+                    Serial.print("Closing valve at pin: ");
+                    Serial.println(p);
+                }, &pin, sizeof(pin), time_opened);
         } else {
             delay(1000);
         }
